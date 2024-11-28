@@ -10,12 +10,12 @@
 (def max-green 13)
 (def max-blue 14)
 
-(defn get-game-num [string]
-  (re-find #"Game (\d+): (.*)" string))
+(defn get-game-tuple [string]
+  (drop 1 (re-find #"Game (\d+): (.*)" string)))
 
 (defn split-game [game]
   (map trim (split
-             (second (drop 1 (get-game-num game)))
+             (second (get-game-tuple game))
              #";")))
 
 (defn get-color-num [color string]
@@ -27,20 +27,31 @@
        string)))
     (catch Exception _ 0)))
 
-(def get-blue-num (partial get-color-num "blue"))
-(def get-red-num (partial get-color-num "red"))
-(def get-green-num (partial get-color-num "green"))
+(defn get-color-num-2 [my-set]
+  (->>
+   (split my-set #",")
+   (map trim)
+   (map (fn [x] (split x #" ")))
+   (map reverse)
+   (map (fn [x] (into [] x)))
+   (into {})))
 
-(defn exceeds-max [string]
+(->
+ (get-color-num-2 "1 lube, 2 red")
+ (get "lube"))
+
+(into {} [["1" "lube"] ["2" "red"]])
+
+(defn exceeds-max [my-set]
   (->
-   (some true? [(> (get-blue-num string) max-blue)
-                (> (get-red-num string) max-red)
-                (> (get-green-num string) max-green)])
+   (some true? [(> (get-color-num "blue" my-set) max-blue)
+                (> (get-color-num "red" my-set) max-red)
+                (> (get-color-num "green" my-set) max-green)])
    (or false)))
 
 (defn evaluate-game [game]
   (if (some true? (map exceeds-max (split-game game)))
     0
-    (Integer/parseInt (second (get-game-num game)))))
+    (Integer/parseInt (first (get-game-tuple game)))))
 
 (apply + (map evaluate-game games))
