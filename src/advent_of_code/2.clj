@@ -1,4 +1,4 @@
-(ns advent-of-code.core
+(ns advent-of-code.2
   (:require [clojure.string :refer [split]]))
 
 (defn -main

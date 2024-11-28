@@ -1,1 +1,1 @@
-["^ ","~$a-test",["^ ","~:row",5,"~:col",1,"~:fixed-arities",["~#set",[0]],"~:name","^0","~:ns","~$advent-of-code.core-test","~:top-ns","^7"],"~:filename","/home/torsi/clojure/advent-of-code/test/advent_of_code/core_test.clj"]
+["^ ","~$a-test",["^ ","~:row",5,"~:col",1,"~:fixed-arities",["~#set",[0]],"~:name","^0","~:ns","~$advent-of-code.core-test","~:top-ns","^7"],"~:filename","/home/sprutugla/projects/clojure/advent-of-code-2023/test/advent_of_code/core_test.clj"]
