@@ -48,9 +48,9 @@
 (defn evaluate-game [game]
   (->
    (split-game game)
-   (as-> x (map exceeds-max x))
-   (as-> x (if (some true? x)
-             0
-             (get-game-num game)))))
+   (#(map exceeds-max %))
+   (#(if (some true? %)
+       0
+       (get-game-num game)))))
 
 (apply + (map evaluate-game games))
