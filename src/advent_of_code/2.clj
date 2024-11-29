@@ -54,8 +54,8 @@
        (get-game-num game)))))
 
 (apply + (map evaluate-game games))
-; ------------ PART 2 ---------------
 
+; ------------ PART 2 ---------------
 (defn get-max [acc vtr] [(max (get vtr 0) (get acc 0))
                          (max (get vtr 1) (get acc 1))
                          (max (get vtr 2) (get acc 2))])
