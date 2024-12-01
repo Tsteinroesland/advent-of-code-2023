@@ -1,8 +1,7 @@
 (ns advent-of-code.3
-  (:require [clojure.string :refer [split join starts-with? blank?]]
+  (:require [clojure.string :refer [split]]
             [clojure.spec.alpha :refer [int-in-range?]]
-            [clojure.math :refer [pow]]
-            [clojure.pprint :refer [pprint]]))
+            [clojure.math :refer [pow]]))
 
 (defn parse-char-to-int [character]
   (let [res (- (int character) 48)]
@@ -45,12 +44,6 @@
     (is-symbol (get-matrix x (inc y))) true
     (is-symbol (get-matrix (inc x) (inc y))) true))
 
-(defn parse-char-to-int [character]
-  (let [res (- (int character) 48)]
-    (if (int-in-range? 0 10 res)
-      res
-      nil)))
-
 (defn list-of-int-to-int [vtr]
   (->> vtr
        (reverse)
@@ -66,12 +59,28 @@
                                     nil))))
        (reduce (fn [acc x] (if (nil? x)
                              (conj acc [])
-                             (conj (vec (butlast acc)) (into (last acc) [x])))))
+                             (conj (vec (butlast acc)) (into (last acc) [x])))) [[]])
        (filter not-empty)
        (map (fn [x] {:coordinates (map (comp (fn [kuk] [kuk y]) first) x) :number (list-of-int-to-int (map second x))}))))
 
-(first (evaluate-line (first matrix) 0))
+(time
+ (->> matrix
+      (map-indexed (fn [idx line] (evaluate-line line idx)))
+      (apply concat)
+      (filter (fn [x] (some true? (map has-adjacent-symbol (:coordinates x)))))
+      (map :number)
+      (reduce +)))
 
-(:coordinates (first (evaluate-line (first matrix) 0)))
-(map has-adjacent-symbol (:coordinates (first (evaluate-line (first matrix) 0))))
+; ------ PART 2 -------- 
+
+(defn find-digit-indices [s]
+  (keep-indexed
+   (fn [idx char]
+     (when (Character/isDigit char)
+       [idx (parse-char-to-int char)]))
+   s))
+
+(find-digit-indices "123123abasdfasda")
+
+(defn group-indices [indices])
 
