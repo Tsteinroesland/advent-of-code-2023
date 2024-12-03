@@ -53,10 +53,11 @@
 
 (defn evaluate-line [string y]
   (->> string
-       (map-indexed (fn [idx x] (let [res (parse-char-to-int x)]
-                                  (if res
-                                    [idx res]
-                                    nil))))
+       (map-indexed (fn [idx x]
+                      (let [res (parse-char-to-int x)]
+                        (if res
+                          [idx res]
+                          nil))))
        (reduce (fn [acc x] (if (nil? x)
                              (conj acc [])
                              (conj (vec (butlast acc)) (into (last acc) [x])))) [[]])
@@ -71,16 +72,15 @@
       (map :number)
       (reduce +)))
 
-; ------ PART 2 -------- 
+; ------ PART 2 --------
+(time
+ (->>
+  (slurp "./resources/input3.txt")
+  (map-indexed (fn [y-idx row]
+                 (keep-indexed (fn [x-idx x] (if (Character/isDigit x)
+                                               [(str "y" y-idx "x" x-idx) x]
+                                               nil))
+                               row)))))
 
-(defn find-digit-indices [s]
-  (keep-indexed
-   (fn [idx char]
-     (when (Character/isDigit char)
-       [idx (parse-char-to-int char)]))
-   s))
 
-(find-digit-indices "123123abasdfasda")
-
-(defn group-indices [indices])
 
